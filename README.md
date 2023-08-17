@@ -1,6 +1,6 @@
 # dataStructures-2
 
-Códigos gerados dura a disciplina de "Estrutura de Dados 2"
+Códigos gerados durante a disciplina de "Estrutura de Dados 2"
 
 ## Provas
 
@@ -10,8 +10,13 @@ Códigos gerados dura a disciplina de "Estrutura de Dados 2"
 
 ## Atividades
 
-~~TODO~~
+- [ ] - Atividade 01
+- [ ] - Atividade 02
+- [ ] - Atividade 03
+- [ ] - Atividade 04
+- [ ] - Atividade 05
 
 ## Exame
 
 Dia: **15/12/2023**
+~~A intenção é nao ficar~~
