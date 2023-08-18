@@ -1,12 +1,15 @@
 # Test Folders
 test/
 tests/
-
+*.txt
 # PDF
 *.pdf
 
 #VS Code
 .vscode/
+
+#python
+*.pyc
 
 # Prerequisites
 *.d

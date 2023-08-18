@@ -11,20 +11,6 @@ Códigos gerados durante a disciplina de "Estrutura de Dados 2" ministrada pelo 
 ## Atividades
 
 - [ ] - **Atividade 01**
-  - [x] - Receber argumentos de entrada/saida
-  - [ ] - Leitura dos arquivos
-  - [ ] - Modos do arquivo final
-    - [ ] - "**C**" crescente
-    - [ ] - "**D**" decrescente
-    - [ ] - "**R**" randomico
-  - [ ] - Metodos de Ordenação  
-    - [ ] - **Insertion** Sort
-    - [ ] - **Selection** Sort
-    - [ ] - **Bubble** Sort
-    - [ ] - **Merge** Sort
-    - [ ] - **Quick** Sort
-    - [ ] - **Heap** Sort
-  - [ ] - Gerar arquivo de saida
 
 - [ ] - **Atividade 02**
 
@@ -41,3 +27,17 @@ Códigos gerados durante a disciplina de "Estrutura de Dados 2" ministrada pelo 
 
 Dia: **15/12/2023**  
 ~~A intenção é nao ficar~~  
+
+### Como utilizar os programas?
+
+Todos os programas deve possuir a seguinte sintaxe:  
+
+>`NomeDoArquivo Input Output`  
+
+Dessa forma um arquivo em ***python*** deve ser executado da seguinte forma:  
+
+>`python Arquivo.py Input.txt Output.txt`
+
+Caso algum arquivo em outra linguagem ele *provalvelmente* possui a mesma sintaxe.  
+
+Além disso verifique a formatação de entrada dos dados, pois cada código (Atividade) possui sua própia forma de ***Input***.
