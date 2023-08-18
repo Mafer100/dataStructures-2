@@ -1,3 +1,10 @@
+# Test Folders
+test/
+tests/
+
+# PDF
+*.pdf
+
 # Prerequisites
 *.d
 
