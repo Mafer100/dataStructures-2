@@ -5,6 +5,9 @@ tests/
 # PDF
 *.pdf
 
+#VS Code
+.vscode/
+
 # Prerequisites
 *.d
 

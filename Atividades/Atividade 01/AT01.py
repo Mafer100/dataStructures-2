@@ -27,6 +27,7 @@ else:
     print("[INFO]: Disabling arguments file names!")
     print("[INFO]: Input and Output file name are inside the code!")
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 def main(input,output):
     if debugMsg:
         print("[INFO]: Input name:",input)
