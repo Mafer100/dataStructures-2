@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 import sortType as sort
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -28,7 +29,21 @@ else:
 if debugMsg:
     print("[INFO]: Degub messages is ON!\n")
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Generating Arrays
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+def arrayGenerate(arraySize,mode):
+    if arraySize < 1:
+        print("[ERROR]: Invalid arguments!")
+        exit(-1)
+        
+    if mode == "r":
+        arrayReturn = np.random.randint(32000,size=arraySize)
+        return arrayReturn
+    else:
+        arrayReturn = list(range(1,arraySize + 1))
+        np.random.shuffle(arrayReturn)
+        return arrayReturn
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Main?
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -46,8 +61,11 @@ def main(input,output):
     if not arraySize.isdecimal():
         print("[ERROR]: The first line of the file is not a number!")
         exit(-1)
-      
-    orderType = inFile.readline()
+    else:
+        arraySize = int(arraySize)
+
+        
+    orderType = inFile.readline()    
     orderType = orderType.strip()
     orderType = orderType.lower()
      
@@ -56,6 +74,7 @@ def main(input,output):
         exit(-1)
     
     # outFile.writelines(["The Array size is:",arraySize,"\nThe order type is:",orderType])
+    print("Array: ",arrayGenerate(arraySize,orderType))
     
     inFile.close()
     outFile.close()
