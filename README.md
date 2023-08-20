@@ -38,6 +38,6 @@ Dessa forma um arquivo em ***python*** deve ser executado da seguinte forma:
 
 >`python Arquivo.py Input.txt Output.txt`
 
-Caso algum arquivo em outra linguagem ele *provalvelmente* possui a mesma sintaxe.  
+Caso algum exista algum arquivo em outra linguagem ele ***provalvelmente*** possui a mesma sintaxe.  
 
 Além disso verifique a formatação de entrada dos dados, pois cada código (Atividade) possui sua própia forma de ***Input***.
