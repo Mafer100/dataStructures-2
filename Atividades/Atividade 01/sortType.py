@@ -63,7 +63,37 @@ def insertionSort(array,mode):
 # bubbleSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-# def bubbleSort():
+def bubbleSort(array):
+    # the function not change the original array
+    # the sorted array is passed by return 
+    # mode = str(mode)
+    
+    # # mode == c or mode == d 
+    # if not mode == "c" and not mode == "d" and not mode == "r":
+    #     print("[ERROR]: Invalid mode!")
+    #     print("[ERROR]: Exiting program!")
+    #     exit()
+    
+    # verify array size is valid
+    if len(array) < 1:
+        print("[ERROR]: Invalid array size!")
+        print("[ERROR]: Exiting program!")
+        exit()
+    changed = True
+    
+    arrayToSort = array.copy()
+    numComp = 0
+    
+    while changed == True:
+        changed = False
+        print(arrayToSort)
+        for index in range(len(arrayToSort) - 1):
+            if arrayToSort[index] > arrayToSort[index + 1]:
+                numComp += 1
+                arrayToSort[index],arrayToSort[index + 1] = arrayToSort[index + 1],arrayToSort[index]
+                changed = True
+    
+    return arrayToSort,numComp
     
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # mergeSort
