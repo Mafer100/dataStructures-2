@@ -1,31 +1,51 @@
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Current Implementation of sort types
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# precisa ordernar em pelo menos 2 formas
-#    crescente e decresente
-#    
-# TODO:
-#       Decidir o que pasar para as funções
-#       Fazer as funções
-#       Fazer as metricas das funções
+# A função deve aceitar somente um array e retorna-lo ordenado
+# quem deve lidar com os casos de ordenamento é o programa...
+# caso necessite que a função realize o ordenamento:
+    # mode = str(mode)
+    # # mode == c or mode == d 
+    # if not mode == "c" and not mode == "d" and not mode == "r":
+    #     print("[ERROR]: Invalid mode!")
+    #     print("[ERROR]: Exiting program!")
+    #     exit()
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Imports
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+import numpy as np
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Debug Flags
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 debugMsg = True
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Aux Functions
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+# Generating Arrays
+def arrayGenerate(arraySize,mode):
+    
+    # need to evaluete if this "if" is really necessary...
+    if arraySize < 1:
+        print("[ERROR]: Invalid arguments!")
+        exit()
+        
+    if mode == "r":
+        arrayReturn = np.random.randint(32000,size=arraySize)
+    else:
+        arrayReturn = list(range(1,arraySize + 1))
+        np.random.shuffle(arrayReturn)
+    
+    print("[INFO]: Array generated:",arrayReturn)
+    return arrayReturn
+# End
+
 # insertionSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-def insertionSort(array,mode):
+def insertionSort(array):
     # the function not change the original array
     # the sorted array is passed by return 
-    mode = str(mode)
-    
-    # mode == c or mode == d 
-    if not mode == "c" and not mode == "d" and not mode == "r":
-        print("[ERROR]: Invalid mode!")
-        print("[ERROR]: Exiting program!")
-        exit()
     
     # verify array size is valid
     if len(array) < 1:
@@ -35,6 +55,9 @@ def insertionSort(array,mode):
 
     arrayToSort = array.copy()
     
+    # Numbem of comparisions done
+    comparisionCounter = 0
+    
     #sorting array by insertion
     for index in range(1,len(arrayToSort)):
         currentVal = arrayToSort[index]
@@ -43,15 +66,11 @@ def insertionSort(array,mode):
         while currentPos > 0 and arrayToSort[currentPos-1] > currentVal:
             arrayToSort[currentPos] = arrayToSort[currentPos-1]
             currentPos -= 1
+            comparisionCounter += 1
         # set the correct value in the position
         arrayToSort[currentPos] = currentVal
         
-    # after sorting check the mode to return...
-    if mode == "c" or mode == "r":
-        return arrayToSort
-    else:
-        arrayToSort.reverse()
-        return arrayToSort
+    return arrayToSort,comparisionCounter
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # selectionSort
@@ -66,34 +85,32 @@ def insertionSort(array,mode):
 def bubbleSort(array):
     # the function not change the original array
     # the sorted array is passed by return 
-    # mode = str(mode)
-    
-    # # mode == c or mode == d 
-    # if not mode == "c" and not mode == "d" and not mode == "r":
-    #     print("[ERROR]: Invalid mode!")
-    #     print("[ERROR]: Exiting program!")
-    #     exit()
     
     # verify array size is valid
     if len(array) < 1:
         print("[ERROR]: Invalid array size!")
         print("[ERROR]: Exiting program!")
         exit()
-    changed = True
-    
+        
     arrayToSort = array.copy()
-    numComp = 0
     
-    while changed == True:
-        changed = False
+    # Verify if array changed positions after a iteration, if not changed the array is sorted
+    # this is done to achieve a better optimization
+    isChanged = True
+    
+    # Numbem of comparisions done
+    comparisionCounter = 0
+    
+    while isChanged == True:
+        isChanged = False
         print(arrayToSort)
         for index in range(len(arrayToSort) - 1):
+            comparisionCounter += 1
             if arrayToSort[index] > arrayToSort[index + 1]:
-                numComp += 1
                 arrayToSort[index],arrayToSort[index + 1] = arrayToSort[index + 1],arrayToSort[index]
-                changed = True
+                isChanged = True
     
-    return arrayToSort,numComp
+    return arrayToSort,comparisionCounter
     
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # mergeSort

@@ -1,11 +1,12 @@
 import sys
-import numpy as np
-import sortType as sort
+import arraySorting as sort
 
 
 # Debug Flags
-debugFastFile  = True
-debugMsg       = True
+debugFastFile   = True
+debugMsg        = True
+debugInputName  = "test.txt"
+debugOutputName = "output.txt"
 # End
 
 # Verificação de erros
@@ -23,23 +24,6 @@ else:
 if debugMsg:
     print("[INFO]: Degub messages is ON!\n")
 # End
-
-# Generating Arrays
-def arrayGenerate(arraySize,mode):
-    if arraySize < 1:
-        print("[ERROR]: Invalid arguments!")
-        exit()
-        
-    if mode == "r":
-        arrayReturn = np.random.randint(32000,size=arraySize)
-    else:
-        arrayReturn = list(range(1,arraySize + 1))
-        np.random.shuffle(arrayReturn)
-    
-    print("[INFO]:",arrayReturn)
-    return arrayReturn
-# End
-
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 def main(input,output):
     if debugMsg:
@@ -65,18 +49,15 @@ def main(input,output):
     if not (orderType == 'c' or orderType == 'd' or orderType == 'r'):
         print("[ERROR]: The second line is not any of the possible options!")
         exit()
+    # All files open, just need to make things happen...
     
-    toSort = arrayGenerate(arraySize,orderType)
-    sorted = sort.insertionSort(toSort,orderType)
-    
-    print("[INFO]:",sorted)
-    
+    # Close files 
     inFile.close()
     outFile.close()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 if __name__ == '__main__':
     if debugFastFile:
-        main("test.txt","output.txt")
+        main(debugInputName,debugOutputName)
     else:
         main(inputFile,outputFile)
