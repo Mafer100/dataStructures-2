@@ -1,3 +1,18 @@
+# Test Folders
+test/
+tests/
+*.txt
+test.*
+
+# PDF
+*.pdf
+
+#VS Code
+.vscode/
+
+#python
+*.pyc
+
 # Prerequisites
 *.d
 
