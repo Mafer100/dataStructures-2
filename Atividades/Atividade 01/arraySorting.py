@@ -40,6 +40,7 @@ def arrayGenerate(arraySize,mode):
     return arrayReturn
 # End
 
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # insertionSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -71,13 +72,42 @@ def insertionSort(array):
         arrayToSort[currentPos] = currentVal
         
     return arrayToSort,comparisionCounter
+# end
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # selectionSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-# def selectionSort():
+def selectionSort(array):
+    # the function not change the original array
+    # the sorted array is passed by return 
     
+    # verify array size is valid
+    if len(array) < 1:
+        print("[ERROR]: Invalid array size!")
+        print("[ERROR]: Exiting program!")
+        exit()
+
+    arrayToSort = array.copy()
+    # print("[INFO]: ",arrayToSort)
+    
+    numIterations,numComparisions = 0,0
+    
+    for index in range(len(arrayToSort)):
+        currentMinIndex = index
+        numIterations += 1
+        for currentPos in range(currentMinIndex,len(arrayToSort)):
+            numComparisions += 1
+            if arrayToSort[currentPos] < arrayToSort[currentMinIndex]:
+                currentMinIndex = currentPos
+        # swap positions
+        (arrayToSort[index],arrayToSort[currentMinIndex]) = (arrayToSort[currentMinIndex],arrayToSort[index])
+        # print("[INFO]: ",arrayToSort,"|",numIterations)
+
+    # print("[INFO]: ",arrayToSort,"|",numIterations,"|",numComparisions)
+    return arrayToSort
+# end
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # bubbleSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -130,4 +160,6 @@ def bubbleSort(array):
 
 # def heapSort():
 
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# TODO: Escolher um tipo de ordenamento e implementa-lo
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
