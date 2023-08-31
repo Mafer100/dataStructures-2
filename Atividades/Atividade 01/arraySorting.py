@@ -34,7 +34,8 @@ def arrayGenerate(arraySize,mode):
         arrayReturn = np.random.randint(32000,size=arraySize)
     else:
         arrayReturn = list(range(1,arraySize + 1))
-        np.random.shuffle(arrayReturn)
+        if mode == "d":
+            arrayReturn.reverse()
     
     print("[INFO]: Array generated:",arrayReturn)
     return arrayReturn
