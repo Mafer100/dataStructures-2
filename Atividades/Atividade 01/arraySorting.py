@@ -25,7 +25,7 @@ debugMsg = True
 # Generating Arrays
 def arrayGenerate(arraySize,mode):
     
-    # need to evaluete if this "if" is really necessary...
+    # need to evaluate if this "if" is really necessary...
     if arraySize < 1:
         print("[ERROR]: Invalid arguments!")
         exit()
