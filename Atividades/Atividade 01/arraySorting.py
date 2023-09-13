@@ -3,13 +3,7 @@
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # A função deve aceitar somente um array e retorna-lo ordenado
 # quem deve lidar com os casos de ordenamento é o programa...
-# caso necessite que a função realize o ordenamento:
-    # mode = str(mode)
-    # # mode == c or mode == d 
-    # if not mode == "c" and not mode == "d" and not mode == "r":
-    #     print("[ERROR]: Invalid mode!")
-    #     print("[ERROR]: Exiting program!")
-    #     exit()
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Imports
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -17,7 +11,11 @@ import numpy as np
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Debug Flags
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-debugMsg = True
+debugMsg    = False
+# debubOutput = False
+# debugFastFile   = True
+# debugInputName  = "test.txt"
+# debugOutputName = "output.txt"
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Aux Functions
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -36,8 +34,12 @@ def arrayGenerate(arraySize,mode):
         arrayReturn = list(range(1,arraySize + 1))
         if mode == "d":
             arrayReturn.reverse()
+        elif mode == "rc" or mode == "rd":
+            np.random.shuffle(arrayReturn)
     
-    print("[INFO]: Array generated:",arrayReturn)
+    if debugMsg:
+        print("[INFO]: Array generated:",arrayReturn)
+        
     return arrayReturn
 # End
 
@@ -146,15 +148,113 @@ def bubbleSort(array):
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # mergeSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Função recursiva!!
 
-# def mergeSort():
+def mergeSort(array):
+    # verify array size is valid
+    # TODO: Verify the behavior of this check
+    # if len(array) < 1:
+    #     print("[ERROR]: Invalid array size!")
+    #     print("[ERROR]: Exiting program!")
+    #     exit()
+    
+    # base case for recursion 
+    if len(array) <= 1:
+        return(array)
+    
+    arrayToSort = array.copy()
+    
+    # get the middle of array
+    arrayMiddle = len(arrayToSort) // 2
+    
+    # go to right and left side recursively
+    rightSide = mergeSort(arrayToSort[:arrayMiddle])
+    leftSide  = mergeSort(arrayToSort[arrayMiddle:])
+    
+    return mergeAux(rightSide,leftSide)
+
+# aux merging function
+def mergeAux(rightSide,leftSide):
+    rightIndex = 0
+    leftIndex  = 0
+    
+    arrayReturn = []
+    
+    while leftIndex < len(leftSide) and rightIndex < len(rightSide):
+        if leftSide[leftIndex] < rightSide[rightIndex]:
+            arrayReturn.append(leftSide[leftIndex])
+            leftIndex += 1    
+        else:
+            arrayReturn.append(rightSide[rightIndex])
+            rightIndex += 1
+
+    arrayReturn += rightSide[rightIndex:]
+    arrayReturn += leftSide[leftIndex:]
+    
+    return arrayReturn
     
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # quickSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-# def quickSort():
+# TODO:Implement random pivot quick sort
 
+def quickSort(array,start=None,end=None):
+    # the function not change the original array
+    # the sorted array is passed by return 
+    # verify if array size is valid
+    
+    #check if is the first iteration
+    if start == None or end == None:
+        # BUG: If the size of array is <= 2, the function doesnt sort correctly
+        if len(array) <= 2:
+            print("[ERROR]: Invalid array size!")
+            print("[ERROR]: Exiting program!")
+            exit()
+        
+        start = 0
+        end   = (len(array) - 1)
+        
+        # if is the first iteration create "arrayToSort"
+        # this is because we dont want to change the "original" array
+        global arrayToSort
+        arrayToSort = array.copy()
+        
+    if start < end:
+        pivot = quickSortAux(arrayToSort,start,end)
+        quickSort(arrayToSort,start,pivot-1)
+        quickSort(array,pivot+1,end)
+            
+    return arrayToSort
+    
+    
+    
+def quickSortAux(array,startPos,endPos):
+
+    # check if the Positions are "valid"
+    if endPos < startPos:
+        print("[ERROR]: Invalid parameters!") 
+        print("[ERROR]: Check quickSort Function!")
+        print("[ERROR]: End:",endPos," Start:",startPos)
+        exit()
+        
+    pivotVal  = array[startPos]
+    leftSide  = startPos + 1 
+    rightSide = endPos
+
+    while leftSide < rightSide:
+        while leftSide <= rightSide and array[leftSide] <= pivotVal: #check endPos
+            # leftSide += 1 
+            leftSide = leftSide + 1          
+        while array[rightSide] >= pivotVal and leftSide <= rightSide : #check startPos
+            # rightSide -= 1
+            rightSide = rightSide - 1
+        if leftSide < rightSide:
+            array[leftSide],array[rightSide] = array[rightSide],array[leftSide]
+    
+    array[startPos],array[rightSide] = array[rightSide],array[startPos]
+    
+    return rightSide
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # heapSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -162,5 +262,5 @@ def bubbleSort(array):
 # def heapSort():
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# TODO: Escolher um tipo de ordenamento e implementa-lo
+# TODO: Implementar tree sort e/ou burst sort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

@@ -3,8 +3,8 @@ import arraySorting as sort
 
 
 # Debug Flags
-debugFastFile   = True
 debugMsg        = True
+debugFastFile   = True
 debugInputName  = "test.txt"
 debugOutputName = "output.txt"
 # End
