@@ -207,7 +207,7 @@ def quickSort(array,start=None,end=None):
     #check if is the first iteration
     if start == None or end == None:
         # BUG: If the size of array is <= 2, the function doesnt sort correctly
-        if len(array) <= 2:
+        if len(array) <= 0:
             print("[ERROR]: Invalid array size!")
             print("[ERROR]: Exiting program!")
             exit()
@@ -223,35 +223,32 @@ def quickSort(array,start=None,end=None):
     if start < end:
         pivot = quickSortAux(arrayToSort,start,end)
         quickSort(arrayToSort,start,pivot-1)
-        quickSort(array,pivot+1,end)
+        quickSort(arrayToSort,pivot+1,end)
             
     return arrayToSort
     
     
     
 def quickSortAux(array,startPos,endPos):
-
-    # check if the Positions are "valid"
-    if endPos < startPos:
-        print("[ERROR]: Invalid parameters!") 
-        print("[ERROR]: Check quickSort Function!")
-        print("[ERROR]: End:",endPos," Start:",startPos)
-        exit()
-        
+   
     pivotVal  = array[startPos]
-    leftSide  = startPos + 1 
+    leftSide  = startPos + 1
     rightSide = endPos
-
-    while leftSide < rightSide:
-        while leftSide <= rightSide and array[leftSide] <= pivotVal: #check endPos
-            # leftSide += 1 
-            leftSide = leftSide + 1          
-        while array[rightSide] >= pivotVal and leftSide <= rightSide : #check startPos
-            # rightSide -= 1
-            rightSide = rightSide - 1
-        if leftSide < rightSide:
-            array[leftSide],array[rightSide] = array[rightSide],array[leftSide]
     
+    completeFlag = False
+    while not completeFlag:
+        
+        while leftSide <= rightSide and array[leftSide] <= pivotVal:
+            leftSide = leftSide + 1
+        
+        while rightSide >= leftSide and array[rightSide] >= pivotVal:
+            rightSide = rightSide - 1
+        
+        if leftSide > rightSide:
+            completeFlag = True
+        else:
+            array[leftSide],array[rightSide] = array[rightSide],array[leftSide]
+
     array[startPos],array[rightSide] = array[rightSide],array[startPos]
     
     return rightSide
