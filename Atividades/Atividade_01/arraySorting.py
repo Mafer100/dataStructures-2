@@ -256,8 +256,44 @@ def quickSortAux(array,startPos,endPos):
 # heapSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-# def heapSort():
+def heapSort(array):
+    arrayToSort = array.copy()
+    
+    heapSize = len(arrayToSort)
+    createMaxHeap(arrayToSort,heapSize)
+    
+    for pos in range(len(arrayToSort)-1,0,-1):
+        # swap
+        arrayToSort[0],arrayToSort[pos] = arrayToSort[pos],arrayToSort[0]
+        
+        heapSize -= 1
+        heapify(arrayToSort,0,heapSize)
 
+    return arrayToSort
+
+def createMaxHeap(array,heapSize):
+    positions = range(len(array)//2,-1,-1)
+    
+    for pos in positions:
+        heapify(array,pos,heapSize)
+
+def heapify(array,pos,heapSize):
+    left  = (2*pos) + 1
+    right = (2*pos) + 2
+    largest = pos
+    
+    if left  <= (heapSize -1) and array[left] > array[pos]:
+        largest = left
+        
+    if right <= (heapSize -1) and array[right] > array[largest]:
+        largest = right
+    
+    if pos != largest:
+        # swap
+        array[largest],array[pos] = array[pos],array[largest]
+        heapify(array,largest,heapSize-1)
+    
+    
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # TODO: Implementar tree sort e/ou burst sort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
