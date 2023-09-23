@@ -133,7 +133,6 @@ def bubbleSort(array):
      
     while isChanged == True:
         isChanged = False
-        print(arrayToSort)
         for index in range(len(arrayToSort) - 1):
             bubbleComparisonCounter += 1
             if arrayToSort[index] > arrayToSort[index + 1]:
@@ -408,9 +407,7 @@ class bTree(object):
     def arrayInsert(self,array):
         for index in range(len(array)):
             self.insert(array[index])
-            
-        
-    
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Tree Sort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
