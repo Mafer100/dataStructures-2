@@ -8,6 +8,7 @@
 # Imports
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 import numpy as np
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Debug Flags
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -293,7 +294,77 @@ def heapify(array,pos,heapSize):
         array[largest],array[pos] = array[pos],array[largest]
         heapify(array,largest,heapSize-1)
     
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Binary Tree
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+class treeNode(object):
+    def __init__(self,value = None):
+        self.value  = value
+        self.left   = None
+        self.right  = None
+        
+class bTree(object):
+    def __init__(self,rootValue = None):
+        self.root = treeNode(rootValue)
+    
+    def insert(self,value):
+        self.__insertAux(self.root,value)
+            
+    def __insertAux(self,node,value):
+        if node == None:
+            newNode = treeNode(value)
+            return newNode
+        
+        if node.value == None:
+            node.value = value
+        elif value < node.value:
+            node.left = self.__insertAux(node.left,value)
+        elif value >= node.value:
+            node.right = self.__insertAux(node.right,value)
+        return node
+    
+    def inOrderPrint(self):
+        global inOrderList
+        inOrderList = []
+        
+        self.__inOrderAux(self.root)
+        
+        print(inOrderList)
+        return inOrderList
+        
+    def __inOrderAux(self,node):
+        global inOrderList
+        if node != None:
+            self.__inOrderAux(node.left)
+            inOrderList.append(node.value)
+            self.__inOrderAux(node.right)
+            
+    def inOrderRet(self):
+        global inOrderList
+        inOrderList = []
+        
+        self.__inOrderAux(self.root)
+        
+        return inOrderList
+            
+    def arrayInsert(self,array):
+        for index in range(len(array)):
+            self.insert(array[index])
+            
+        
     
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# TODO: Implementar tree sort e/ou burst sort
+# Tree Sort
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+def treeSort(array):
+    binaryTree = bTree()
+    
+    binaryTree.arrayInsert(array)
+    
+    return binaryTree.inOrderRet()
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Burst Sort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
