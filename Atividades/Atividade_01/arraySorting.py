@@ -26,7 +26,9 @@ def arrayGenerate(arraySize,mode):
         exit()
         
     if mode == "r":
-        arrayReturn = np.random.randint(32000,size=arraySize)
+        arrayReturn = np.random.randint(32000,size=arraySize,dtype=int)
+        # need this because numpy array are diferent of python arrays... 
+        arrayReturn = arrayReturn.tolist()
     else:
         arrayReturn = list(range(1,arraySize + 1))
         if mode == "d":
