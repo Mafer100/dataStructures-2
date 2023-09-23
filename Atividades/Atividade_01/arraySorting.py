@@ -55,6 +55,7 @@ def insertionSort(array):
         exit()
 
     arrayToSort = array.copy()
+    insertComparisonCounter = 0
     
     #sorting array by insertion
     for index in range(1,len(arrayToSort)):
@@ -62,15 +63,19 @@ def insertionSort(array):
         currentPos = index
         # move the value to correct position
         while currentPos > 0 and arrayToSort[currentPos-1] > currentVal:
+            insertComparisonCounter += 1
             arrayToSort[currentPos] = arrayToSort[currentPos-1]
             currentPos -= 1
+        else:
+            # else only for comparisons counter
+            insertComparisonCounter += 1
         # set the correct value in the position
         arrayToSort[currentPos] = currentVal
         
     if debugMsg:
         print("[INFO][insertionSort]: Array sorted: ",arrayToSort)
         
-    return arrayToSort
+    return arrayToSort,insertComparisonCounter
 # end
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -88,10 +93,12 @@ def selectionSort(array):
         exit()
 
     arrayToSort = array.copy()
+    selectionComparisonCounter = 0
      
     for index in range(len(arrayToSort)):
         currentMinIndex = index
         for currentPos in range(currentMinIndex,len(arrayToSort)):
+            selectionComparisonCounter += 1
             if arrayToSort[currentPos] < arrayToSort[currentMinIndex]:
                 currentMinIndex = currentPos
         # swap positions
@@ -100,7 +107,7 @@ def selectionSort(array):
     if debugMsg:
         print("[INFO][selectionSort]: Array sorted: ",arrayToSort)
 
-    return arrayToSort
+    return arrayToSort,selectionComparisonCounter
 # end
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -118,6 +125,7 @@ def bubbleSort(array):
         exit()
         
     arrayToSort = array.copy()
+    bubbleComparisonCounter = 0
     
     # Verify if array changed positions after a iteration, if not changed the array is sorted
     # this is done to achieve a better optimization
@@ -127,6 +135,7 @@ def bubbleSort(array):
         isChanged = False
         print(arrayToSort)
         for index in range(len(arrayToSort) - 1):
+            bubbleComparisonCounter += 1
             if arrayToSort[index] > arrayToSort[index + 1]:
                 arrayToSort[index],arrayToSort[index + 1] = arrayToSort[index + 1],arrayToSort[index]
                 isChanged = True
@@ -134,26 +143,43 @@ def bubbleSort(array):
     if debugMsg:
         print("[INFO][bubbleSort]: Array sorted: ",arrayToSort)
     
-    return arrayToSort
+    return arrayToSort,bubbleComparisonCounter
     
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # mergeSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Função recursiva!!
+# Needed to create a init function because comparison counter
 
 def mergeSort(array):
+    # verify array size is valid
+    if len(array) < 1:
+        print("[ERROR][mergeSort]: Invalid array size!")
+        print("[ERROR][mergeSort]: Exiting program!")
+        exit()
+    
+    # init values and create a copy of array
+    global mergeComparisonCounter
+    mergeComparisonCounter = 0
+    arrayToSort = array.copy()
+    
+    result = mergeSortInit(arrayToSort)
+    
+    return result,mergeComparisonCounter
+
+def mergeSortInit(array):
     # base case for recursion 
     if len(array) <= 1:
         return(array)
     
-    arrayToSort = array.copy()
-    
+    global mergeComparisonCounter
+     
     # get the middle of array
-    arrayMiddle = len(arrayToSort) // 2
+    arrayMiddle = len(array) // 2
     
     # go to right and left side recursively
-    rightSide = mergeSort(arrayToSort[:arrayMiddle])
-    leftSide  = mergeSort(arrayToSort[arrayMiddle:])
+    rightSide = mergeSortInit(array[:arrayMiddle])
+    leftSide  = mergeSortInit(array[arrayMiddle:])
     
     return mergeAux(rightSide,leftSide)
 
@@ -162,15 +188,19 @@ def mergeAux(rightSide,leftSide):
     rightIndex = 0
     leftIndex  = 0
     
+    global mergeComparisonCounter
+    
     arrayReturn = []
     
     while leftIndex < len(leftSide) and rightIndex < len(rightSide):
         if leftSide[leftIndex] < rightSide[rightIndex]:
             arrayReturn.append(leftSide[leftIndex])
-            leftIndex += 1    
+            leftIndex += 1
+            mergeComparisonCounter += 1 
         else:
             arrayReturn.append(rightSide[rightIndex])
             rightIndex += 1
+            mergeComparisonCounter += 1 
 
     arrayReturn += rightSide[rightIndex:]
     arrayReturn += leftSide[leftIndex:]
@@ -183,40 +213,42 @@ def mergeAux(rightSide,leftSide):
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # quickSort
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 # TODO:Implement random pivot and last element quick sort
+# Needed to create a init function because comparison counter
 
-def quickSort(array,start=None,end=None):
-    # the function not change the original array
-    # the sorted array is passed by return 
-    # verify if array size is valid
-    
-    #check if is the first iteration
-    if start == None or end == None:
-        if len(array) <= 0:
+def quickSort(array):
+    if len(array) < 1:
             print("[ERROR][quickSort]: Invalid array size!")
             print("[ERROR][quickSort]: Exiting program!")
             exit()
         
-        start = 0
-        end   = (len(array) - 1)
-        
-        # if is the first iteration create "arrayToSort"
-        # this is because we dont want to change the "original" array
-        global arrayToSort
-        arrayToSort = array.copy()
-        
+    global quickComparisonCounter
+    quickComparisonCounter = 0
+    
+    # if is the first iteration create "arrayToSort"
+    # this is because we dont want to change the "original" array
+    arrayToSort = array.copy()
+    
+    result = quickSortInit(arrayToSort,0,len(arrayToSort)-1)
+    
+    return result,quickComparisonCounter
+
+def quickSortInit(array,start,end):
+    # the function not change the original array
+    # the sorted array is passed by return 
+    # verify if array size is valid
+    
+    global quickComparisonCounter
+    
     if start < end:
-        pivot = quickSortAux(arrayToSort,start,end)
-        quickSort(arrayToSort,start,pivot-1)
-        quickSort(arrayToSort,pivot+1,end)
+        pivot = quickSortAux(array,start,end)
+        quickSortInit(array,start,pivot-1)
+        quickSortInit(array,pivot+1,end)
         
     if debugMsg:
-        print("[INFO][quickSort]: Returning array: ",arrayToSort)
+        print("[INFO][quickSort]: Returning array: ",array)
             
-    return arrayToSort
-    
-    
+    return array
     
 def quickSortAux(array,startPos,endPos):
     # AKA partition function
@@ -225,6 +257,7 @@ def quickSortAux(array,startPos,endPos):
     leftSide  = startPos + 1
     rightSide = endPos
     
+    global quickComparisonCounter
     
     # for some reason this need a "do-while"
     completeFlag = False
@@ -232,9 +265,15 @@ def quickSortAux(array,startPos,endPos):
         
         while leftSide <= rightSide and array[leftSide] <= pivotVal:
             leftSide = leftSide + 1
-        
+            quickComparisonCounter += 1
+        else:
+            quickComparisonCounter += 1
+    
         while rightSide >= leftSide and array[rightSide] >= pivotVal:
             rightSide = rightSide - 1
+            quickComparisonCounter += 1
+        else:
+            quickComparisonCounter += 1
         
         if leftSide > rightSide:
             completeFlag = True
@@ -253,6 +292,8 @@ def quickSortAux(array,startPos,endPos):
 def heapSort(array):
     
     arrayToSort = array.copy()
+    global heapComparisonCounter
+    heapComparisonCounter = 0
     
     heapSize = len(arrayToSort)
     createMaxHeap(arrayToSort,heapSize)
@@ -267,7 +308,7 @@ def heapSort(array):
     if debugMsg:
         print("[INFO][heapSort]: Array sorted: ",arrayToSort)
         
-    return arrayToSort
+    return arrayToSort,heapComparisonCounter
 
 def createMaxHeap(array,heapSize):
     positions = range(len(array)//2,-1,-1)
@@ -280,12 +321,17 @@ def heapify(array,pos,heapSize):
     right = (2*pos) + 2
     largest = pos
     
+    global heapComparisonCounter
+    
+    heapComparisonCounter += 1
     if left  <= (heapSize -1) and array[left] > array[pos]:
         largest = left
-        
+    
+    heapComparisonCounter += 1
     if right <= (heapSize -1) and array[right] > array[largest]:
         largest = right
     
+    heapComparisonCounter += 1
     if pos != largest:
         # swap
         array[largest],array[pos] = array[pos],array[largest]
@@ -311,6 +357,7 @@ class treeNode(object):
 class bTree(object):
     def __init__(self,rootValue = None):
         self.root = treeNode(rootValue)
+        self.comparisonCounter = 0
     
     def insert(self,value):
         self.__insertAux(self.root,value)
@@ -322,10 +369,16 @@ class bTree(object):
         
         if node.value == None:
             node.value = value
+            self.comparisonCounter += 1
         elif value < node.value:
             node.left = self.__insertAux(node.left,value)
+            self.comparisonCounter += 1
         elif value >= node.value:
             node.right = self.__insertAux(node.right,value)
+            self.comparisonCounter += 1
+        else:
+            self.comparisonCounter += 1
+            
         return node
     
     def inOrderPrint(self):
@@ -369,13 +422,14 @@ def treeSort(array):
     
     arrayReturn = binaryTree.inOrderRet()
     
+    treeComparisonCounter = binaryTree.comparisonCounter
     # destroy tree
     del binaryTree
     
     if debugMsg:
         print("[INFO][heapSort]: Array sorted: ",arrayReturn)
         
-    return arrayReturn
+    return arrayReturn,treeComparisonCounter
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Burst Sort
