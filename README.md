@@ -4,13 +4,13 @@ Códigos gerados durante a disciplina de "Estrutura de Dados 2" ministrada pelo 
 
 ## Provas
 
-- [ ] - Prova 1 (**05/09/2023**)
+- [x] - Prova 1 (**05/09/2023**)
 - [ ] - Prova 2 (**31/10/2023**)
 - [ ] - Prova 3 (**08/12/2023**)
 
 ## Atividades
 
-- [ ] - **Atividade 01**
+- [x] - **Atividade 01**
 
 - [ ] - **Atividade 02**
 
