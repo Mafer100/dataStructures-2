@@ -1,21 +1,40 @@
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Current Implementation of sort types
+# Info
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# A função deve aceitar somente um array e retorna-lo ordenado
-# quem deve lidar com os casos de ordenamento é o programa...
+# Monolithic version of AT01.py
+# if this not work correctly check: https://github.com/Mafer100/dataStructures-2
+# for the original file...
+
+# check if debugFastFile flag is false for command line use
+
+# Author: Matheus Fernandes
+# Email: mathesfernandes2013@gmail.com
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Imports
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# For arraySorting.py Part
+
 # numpy only for arraygenerate LOL
 import numpy as np
 # time for timer
 import time
+
+# For AT01.py part
+import sys
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Debug Flags
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 debugMsg    = False
 debugTimer  = False
+debugFastFile   = False
+debugInputName  = "test.txt"
+debugOutputName = "output.txt"
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# arraySorting to Monolithic
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Just a copy of arraySorting.py
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Auxiliar Functions
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -531,12 +550,104 @@ def treeSort(array):
         print("[INFO][treeSort]: Elapsed time to sort array : ",timer.deltaTime,"ms")
         
     return arrayReturn,treeComparisonCounter,timer.deltaTime
+# end
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Burst Sort
+# AT01.py to Monolithic
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Infelizmente não achei nenhum artigo confiável de alguma implementação
-# que não seja em string, deveria ser uma variação do radix sort com 
-# quick sort , enfim tudo o que achei fala sobre como lidar com strings
+# the AT01.py file with modifications to work in a monolithic file...
 
-# é muito util para array que possuem muitos elementos "iguais"
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Error and Debug handling
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Verificação de erros
+if not debugFastFile and len(sys.argv) == 3:
+    inputFile  = sys.argv[1]
+    outputFile = sys.argv[2]
+elif not debugFastFile and len(sys.argv) != 3:
+    print("[ERROR]: Invalid number of arguments!")
+    exit()
+else:
+    print("\n[INFO]: Fast Debug ON")
+    print("[INFO]: Disabling arguments file names!")
+    print("[INFO]: Input and Output file name are inside the code!\n")
+    
+if debugMsg:
+    print("[INFO]: Degub messages is ON!\n")
+# End
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Main Function
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+def main(input,output):
+    if debugMsg:
+        print("[DEBUG]: Input name:",input)
+        print("[DEBUG]: Output name:",output,"\n")
+        
+    inFile  = open(input,"r")
+    outFile = open(output,"w")
+    
+    arraySize = inFile.readline()
+    arraySize = arraySize.strip()
+    
+    if arraySize == '':
+        print("[ERROR]: Empty File!")
+        outFile.write("[ERROR]: Empty File!")
+        exit()
+    
+    if not arraySize.isdecimal():
+        print("[ERROR]: The first line of the file is not a number!")
+        outFile.write("[ERROR]: The first line of the file is not a number!")
+        exit()
+    else:
+        arraySize = int(arraySize)
+
+    arrayOrder = inFile.readline()    
+    arrayOrder = arrayOrder.strip()
+    arrayOrder = arrayOrder.lower()
+     
+    if not (arrayOrder == 'c' or arrayOrder == 'd' or arrayOrder == 'r' or arrayOrder == "rc" or arrayOrder == "rd"):
+        print("[ERROR]: The second line is not any of the possible options!")
+        outFile.write("[ERROR]: The second line is not any of the possible options!")
+        exit()
+    # All files open, just need to make things happen...
+    
+    # generate array
+    arrayToSort = arrayGenerate(arraySize,arrayOrder)
+    outFile.writelines(["[INFO]: The generated array is: ",str(arrayToSort),"\n\n"])
+    
+    print("[INFO]: Sorting arrays...")
+    
+    # big arrays take a looong time to complete, not a bug just python
+    # TODO: MultiThreading, every sort function get a thread to work fast
+    if arraySize >= 5000:
+        print("[INFO]: If array is too large,this may take a while!")
+    
+    # sort array
+    insertionSorted,insertionComparisons,insertionTimer = insertionSort(arrayToSort) 
+    selectionSorted,selectionComparisons,selectionTimer = selectionSort(arrayToSort)
+    bubbleSorted,bubbleComparisons,bubbleTimer = bubbleSort(arrayToSort)
+    mergeSorted,mergeComparisons,mergeTimer = mergeSort(arrayToSort)
+    quickSorted,quickComparisons,quickTimer = quickSort(arrayToSort)
+    heapSorted,heapComparisons,heapTimer = heapSort(arrayToSort)
+    treeSorted,treeComparisons,treeTimer = treeSort(arrayToSort)
+    
+    # write to output file
+    outFile.writelines(["[Insertion Sort]: ",str(insertionSorted)," | ",str(insertionComparisons)," comparisons | ",str(insertionTimer)," ms\n"],)
+    outFile.writelines(["[Selection Sort]: ",str(selectionSorted)," | ",str(selectionComparisons)," comparisons | ",str(selectionTimer)," ms\n"],)
+    outFile.writelines(["[Bubble Sort]:    ",str(bubbleSorted)," | ",str(bubbleComparisons)," comparisons | ",str(bubbleTimer)," ms\n"],)
+    outFile.writelines(["[Merge Sort]:     ",str(mergeSorted)," | ",str(mergeComparisons)," comparisons | ",str(mergeTimer)," ms\n"],)
+    outFile.writelines(["[Quick Sort]:     ",str(quickSorted)," | ",str(quickComparisons)," comparisons | ",str(quickTimer)," ms\n"],)
+    outFile.writelines(["[Heap Sort]:      ",str(heapSorted)," | ",str(heapComparisons)," comparisons | ",str(heapTimer)," ms\n"],)
+    outFile.writelines(["[Tree Sort]:      ",str(treeSorted)," | ",str(treeComparisons)," comparisons | ",str(treeTimer)," ms\n"],)
+    
+    # Close files 
+    inFile.close()
+    outFile.close()
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+if __name__ == '__main__':
+    if debugFastFile:
+        main(debugInputName,debugOutputName)
+    else:
+        main(inputFile,outputFile)

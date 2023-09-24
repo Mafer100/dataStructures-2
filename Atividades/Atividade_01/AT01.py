@@ -5,7 +5,7 @@ import arraySorting as sort
 # Debug Flags
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 debugMsg        = False
-debugFastFile   = True
+debugFastFile   = False
 debugInputName  = "test.txt"
 debugOutputName = "output.txt"
 # End
@@ -68,7 +68,9 @@ def main(input,output):
     
     print("[INFO]: Sorting arrays...")
     
-    if len(arrayToSort) >= 5000:
+    # big arrays take a looong time to complete, not a bug just python
+    # TODO: MultiThreading, every sort function get a thread to work fast
+    if arraySize >= 5000:
         print("[INFO]: If array is too large,this may take a while!")
     
     # sort array
