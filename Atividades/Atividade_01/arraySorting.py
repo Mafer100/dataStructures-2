@@ -7,24 +7,60 @@
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Imports
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# only for arraygenerate LOL
+# numpy only for arraygenerate LOL
 import numpy as np
+# time for timer
+import time
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Debug Flags
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 debugMsg    = False
+debugTimer  = False
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Aux Functions
+# Auxiliar Functions
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+class timeCounter(object):
+    def __init__(self):
+        self.initTime  = 0
+        self.endTime   = 0
+        self.deltaTime = None
+        
+    def startTimer(self):
+        self.initTime = time.perf_counter()
+        # seconds to miliseconds
+        self.initTime = self.initTime * 1000
+        
+        return self.initTime
+        
+    def stopTimer(self):
+        self.endTime = time.perf_counter()
+        # seconds to miliseconds
+        self.endTime = self.endTime * 1000
+        
+        self.generateDeltaTime()
+        
+        return self.deltaTime
+    
+    def generateDeltaTime(self):
+        self.deltaTime = self.endTime - self.initTime
+        
+        # round value
+        # use 2 decimal digits for precision
+        self.deltaTime = round(self.deltaTime,2)
+        
+        return self.deltaTime
+        
 # Generating Arrays
 def arrayGenerate(arraySize,mode):
-    
     # need to evaluate if this "if" is really necessary...
     if arraySize < 1:
         print("[ERROR]: Invalid arguments!")
         exit()
         
+    timer = timeCounter()
+    timer.startTimer()
+     
     if mode == "r":
         arrayReturn = np.random.randint(32000,size=arraySize,dtype=int)
         # need this because numpy array are diferent of python arrays... 
@@ -36,8 +72,14 @@ def arrayGenerate(arraySize,mode):
         elif mode == "rc" or mode == "rd":
             np.random.shuffle(arrayReturn)
     
+    timer.stopTimer()
+    
     if debugMsg:
-        print("[INFO]: Array generated: ",arrayReturn)
+        print("[INFO][arrayGenerate]: Array generated: ",arrayReturn)
+        
+    if debugTimer:
+        print("[INFO][arrayGenerate]: Elapsed time to create array : ",timer.deltaTime,"ms")
+        
         
     return arrayReturn
 # End
@@ -58,6 +100,9 @@ def insertionSort(array):
 
     arrayToSort = array.copy()
     insertComparisonCounter = 0
+    timer = timeCounter()
+    
+    timer.startTimer()
     
     #sorting array by insertion
     for index in range(1,len(arrayToSort)):
@@ -73,11 +118,16 @@ def insertionSort(array):
             insertComparisonCounter += 1
         # set the correct value in the position
         arrayToSort[currentPos] = currentVal
+    
+    timer.stopTimer()
         
     if debugMsg:
         print("[INFO][insertionSort]: Array sorted: ",arrayToSort)
         
-    return arrayToSort,insertComparisonCounter
+    if debugTimer:
+        print("[INFO][insertionSort]: Elapsed time to sort array : ",timer.deltaTime,"ms")
+        
+    return arrayToSort,insertComparisonCounter,timer.deltaTime
 # end
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -96,6 +146,10 @@ def selectionSort(array):
 
     arrayToSort = array.copy()
     selectionComparisonCounter = 0
+    timer = timeCounter()
+    
+    # start timer
+    timer.startTimer()
      
     for index in range(len(arrayToSort)):
         currentMinIndex = index
@@ -106,10 +160,15 @@ def selectionSort(array):
         # swap positions
         (arrayToSort[index],arrayToSort[currentMinIndex]) = (arrayToSort[currentMinIndex],arrayToSort[index])
         
+    timer.stopTimer()
+        
     if debugMsg:
         print("[INFO][selectionSort]: Array sorted: ",arrayToSort)
+        
+    if debugTimer:
+        print("[INFO][selectionSort]: Elapsed time to sort array : ",timer.deltaTime,"ms")
 
-    return arrayToSort,selectionComparisonCounter
+    return arrayToSort,selectionComparisonCounter,timer.deltaTime
 # end
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -128,11 +187,14 @@ def bubbleSort(array):
         
     arrayToSort = array.copy()
     bubbleComparisonCounter = 0
+    timer = timeCounter()
     
     # Verify if array changed positions after a iteration, if not changed the array is sorted
     # this is done to achieve a better optimization
-    isChanged = True
+    
+    timer.startTimer()
      
+    isChanged = True
     while isChanged == True:
         isChanged = False
         for index in range(len(arrayToSort) - 1):
@@ -141,10 +203,15 @@ def bubbleSort(array):
                 arrayToSort[index],arrayToSort[index + 1] = arrayToSort[index + 1],arrayToSort[index]
                 isChanged = True
                 
+    timer.stopTimer()
+                
     if debugMsg:
         print("[INFO][bubbleSort]: Array sorted: ",arrayToSort)
+        
+    if debugTimer:
+        print("[INFO][bubbleSort]: Elapsed time to sort array : ",timer.deltaTime,"ms")
     
-    return arrayToSort,bubbleComparisonCounter
+    return arrayToSort,bubbleComparisonCounter,timer.deltaTime
     
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # mergeSort
@@ -163,10 +230,22 @@ def mergeSort(array):
     global mergeComparisonCounter
     mergeComparisonCounter = 0
     arrayToSort = array.copy()
+    timer = timeCounter()
+    
+    # start time before recursion
+    timer.startTimer()
     
     result = mergeSortInit(arrayToSort)
     
-    return result,mergeComparisonCounter
+    timer.stopTimer()
+    
+    if debugMsg:
+        print("[INFO][mergeSort]: Array sorted: ",result)
+    
+    if debugTimer:
+        print("[INFO][mergeSort]: Elapsed time to sort array : ",timer.deltaTime,"ms")
+    
+    return result,mergeComparisonCounter,timer.deltaTime
 
 def mergeSortInit(array):
     # base case for recursion 
@@ -225,14 +304,23 @@ def quickSort(array):
         
     global quickComparisonCounter
     quickComparisonCounter = 0
-    
-    # if is the first iteration create "arrayToSort"
-    # this is because we dont want to change the "original" array
     arrayToSort = array.copy()
+    timer = timeCounter()
+    
+    # start time before recursion
+    timer.startTimer()   
     
     result = quickSortInit(arrayToSort,0,len(arrayToSort)-1)
     
-    return result,quickComparisonCounter
+    timer.stopTimer()
+    
+    if debugMsg:
+        print("[INFO][quickSort]: Array sorted: ",result)
+        
+    if debugTimer:
+        print("[INFO][quickSort]: Elapsed time to sort array : ",timer.deltaTime,"ms")
+    
+    return result,quickComparisonCounter,timer.deltaTime
 
 def quickSortInit(array,start,end):
     # the function not change the original array
@@ -295,6 +383,9 @@ def heapSort(array):
     arrayToSort = array.copy()
     global heapComparisonCounter
     heapComparisonCounter = 0
+    timer = timeCounter()
+    
+    timer.startTimer()
     
     heapSize = len(arrayToSort)
     createMaxHeap(arrayToSort,heapSize)
@@ -306,10 +397,15 @@ def heapSort(array):
         heapSize -= 1
         heapify(arrayToSort,0,heapSize)
 
+    timer.stopTimer()
+    
     if debugMsg:
         print("[INFO][heapSort]: Array sorted: ",arrayToSort)
         
-    return arrayToSort,heapComparisonCounter
+    if debugTimer:
+        print("[INFO][heapSort]: Elapsed time to sort array : ",timer.deltaTime,"ms")
+        
+    return arrayToSort,heapComparisonCounter,timer.deltaTime
 
 def createMaxHeap(array,heapSize):
     positions = range(len(array)//2,-1,-1)
@@ -417,18 +513,28 @@ class bTree(object):
 def treeSort(array):
     binaryTree = bTree()
     
+    # create and start timer
+    timer = timeCounter()
+    timer.startTimer()
+    
+    # insert array in btree
     binaryTree.arrayInsert(array)
     
     arrayReturn = binaryTree.inOrderRet()
-    
     treeComparisonCounter = binaryTree.comparisonCounter
+    
+    timer.stopTimer()
+    
     # destroy tree
     del binaryTree
     
     if debugMsg:
-        print("[INFO][heapSort]: Array sorted: ",arrayReturn)
+        print("[INFO][treeSort]: Array sorted: ",arrayReturn)
+    
+    if debugTimer:
+        print("[INFO][treeSort]: Elapsed time to sort array : ",timer.deltaTime,"ms")
         
-    return arrayReturn,treeComparisonCounter
+    return arrayReturn,treeComparisonCounter,timer.deltaTime
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Burst Sort
